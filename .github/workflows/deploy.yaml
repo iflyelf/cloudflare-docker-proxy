@@ -15,11 +15,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 手动安装 Yarn 依赖，允许修改 lockfile
+      # 1. 拉取代码
+      - uses: actions/checkout@v4
+
+      # 2. 安装 Node.js
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      # 3. 安装 Yarn 4
+      - run: npm install -g yarn@4
+
+      # 4. 手动安装依赖，允许修改 lockfile
       - name: Install dependencies
         run: |
           export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           yarn install
+
+      # 5. 安装 wrangler CLI
+      - run: npm install -g wrangler@3
         
       - name: Publish
         uses: cloudflare/wrangler-action@v3
