@@ -14,11 +14,15 @@ jobs:
     name: Build & Deploy
     steps:
       - uses: actions/checkout@v4
+
+      # 禁用 Yarn immutable 安装
+      - name: Set Yarn env
+        run: echo "YARN_ENABLE_IMMUTABLE_INSTALLS=false" >> $GITHUB_ENV
+        
       - name: Publish
         uses: cloudflare/wrangler-action@v3
         env:
           CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN || 'iflyelf.com' }}
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false yarn install
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{secrets.CF_ACCOUNT_ID}}
